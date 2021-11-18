@@ -7,7 +7,7 @@ import Token from "../classes/token";
 
 const transferenciaRouts = Router();
 
-
+ 
 
 //Obtener transferencias paginadas
 

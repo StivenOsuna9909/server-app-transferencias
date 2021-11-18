@@ -1,5 +1,5 @@
 import { Schema, Document, model } from 'mongoose';
-
+ 
 const transferSchema = new Schema ({
     created: {
         type: Date

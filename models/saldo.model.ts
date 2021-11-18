@@ -1,5 +1,5 @@
 import { Schema, Document, model } from "mongoose";
-
+  
 const saldoSchema = new Schema ({
     created: {
         type: Date
