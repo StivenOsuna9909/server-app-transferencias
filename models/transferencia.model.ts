@@ -1,8 +1,4 @@
-
-
-
-import { Schema, Document, model } from 'mongoose'
-
+import { Schema, Document, model } from 'mongoose';
 
 const transferSchema = new Schema ({
     created: {
