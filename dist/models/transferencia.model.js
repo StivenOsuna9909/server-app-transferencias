@@ -11,18 +11,23 @@ const transferSchema = new mongoose_1.Schema({
     },
     cuenta: {
         type: String,
-        ref: 'Cuenta',
-        required: [true, 'Debe de existir un tipo de cuenta para transferir']
+        ref: 'Tipo de Cuenta',
+        required: [true, 'Debe de existir un tipo de cuenta ahorros o corriente para transferir']
     },
     numerocuenta: {
         type: String,
-        ref: 'Cuanto',
+        ref: 'Numero Cuenta destino',
         required: [true, 'Debe de existir un numero de cuenta para transferir']
     },
     cuantotransfiere: {
         type: String,
-        ref: 'Cuanto',
+        ref: 'Cuanto se transfiere',
         required: [true, 'Debe de existir una cantidad para transferir']
+    },
+    moneda: {
+        type: String,
+        ref: 'Moneda en la cual se transfiere',
+        required: [true, 'Debe de existir una moneda para transferir']
     },
     usuario: {
         type: mongoose_1.Schema.Types.ObjectId,

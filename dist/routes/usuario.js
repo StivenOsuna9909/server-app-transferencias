@@ -69,6 +69,37 @@ userRoutes.post("/create", (req, res) => {
             err,
         });
     });
+    const saldoRoutes = (0, express_1.Router)();
+    //Crear un saldo
+    const saldo = {
+        nombre: req.body.nombre,
+        email: req.body.email,
+        password: bcrypt_1.default.hashSync(req.body.password, 10),
+        tipocuenta: req.body.tipocuenta,
+        numerocuenta: req.body.numerocuenta,
+        saldocuenta: req.body.saldocuenta,
+    };
+    usuario_model_1.Usuario.create(saldo)
+        .then((saldoDB) => {
+        const tokenuser = token_1.default.getJwtToken({
+            _id: saldoDB._id,
+            nombre: saldoDB.nombre,
+            email: saldoDB.email,
+            tipocuenta: saldoDB.tipocuenta,
+            numerocuenta: saldoDB.numerocuenta,
+            saldocuenta: saldoDB.saldocuenta,
+        });
+        res.json({
+            ok: true,
+            token: tokenuser,
+        });
+    })
+        .catch((err) => {
+        res.json({
+            ok: false,
+            err,
+        });
+    });
 });
 //Actualizar usuario
 userRoutes.post("/update", autenticacion_1.verificaToken, (req, res) => {
@@ -83,7 +114,7 @@ userRoutes.post("/update", autenticacion_1.verificaToken, (req, res) => {
         if (!userDB) {
             return res.json({
                 ok: false,
-                mensaje: 'No existe un usuario con ese ID'
+                mensaje: "No existe un usuario con ese ID",
             });
         }
         const tokenUser = token_1.default.getJwtToken({
@@ -97,11 +128,34 @@ userRoutes.post("/update", autenticacion_1.verificaToken, (req, res) => {
         });
     });
 });
-userRoutes.get('/', [autenticacion_1.verificaToken], (req, res) => {
+//Actualizar SALDO
+userRoutes.post("/updateamount", autenticacion_1.verificaToken, (req, res) => {
+    const user = {
+        saldo: req.body.saldo || req.usuario.saldo,
+    };
+    usuario_model_1.Usuario.findByIdAndUpdate(req.usuario._id, user, { new: true }, (err, userDB) => {
+        if (err)
+            throw err;
+        if (!userDB) {
+            return res.json({
+                ok: false,
+                mensaje: "No existe un usuario con ese ID",
+            });
+        }
+        const tokenUser = token_1.default.getJwtToken({
+            _id: userDB._id,
+        });
+        res.json({
+            ok: true,
+            token: tokenUser,
+        });
+    });
+});
+userRoutes.get("/", [autenticacion_1.verificaToken], (req, res) => {
     const usuario = req.usuario;
     res.json({
         ok: true,
-        usuario
+        usuario,
     });
 });
 exports.default = userRoutes;

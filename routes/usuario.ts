@@ -6,40 +6,40 @@ import { verificaToken } from "../middlewares/autenticacion";
 
 const userRoutes = Router();
 
-userRoutes.post("/create", (req: Request, res: Response) => {
-  //login
-  userRoutes.post("/login", (req: Request, res: Response) => {
-    const body = req.body;
-    Usuario.findOne({ email: req.body.email }, (err: any, userDB: IUsuario) => {
-      if (err) throw err;
-      if (!userDB) {
-        return res.json({
-          ok: false,
-          mensaje: "Usuario/contraseña no son correctos",
-        });
-      }
+//login
+userRoutes.post("/login", (req: Request, res: Response) => {
+  const body = req.body;
+  Usuario.findOne({ email: req.body.email }, (err: any, userDB: IUsuario) => {
+    if (err) throw err;
+    if (!userDB) {
+      return res.json({
+        ok: false,
+        mensaje: "Usuario/contraseña no son correctos",
+      });
+    }
 
-      if (userDB.compararPassword(body.password)) {
-        const tokenUser = Token.getJwtToken({
-          _id: userDB._id,
-          nombre: userDB.nombre,
-          email: userDB.email,
-        });
+    if (userDB.compararPassword(body.password)) {
+      const tokenUser = Token.getJwtToken({
+        _id: userDB._id,
+        nombre: userDB.nombre,
+        email: userDB.email,
+      });
 
-        res.json({
-          ok: true,
-          token: tokenUser,
-        });
-      } else {
-        return res.json({
-          ok: false,
-          mensaje: "Usuario/contraseña no son correctos",
-        });
-      }
-    });
+      res.json({
+        ok: true,
+        token: tokenUser,
+      });
+    } else {
+      return res.json({
+        ok: false,
+        mensaje: "Usuario/contraseña no son correctos",
+      });
+    }
   });
+});
 
-  //Crear un usuario
+//Crear un usuario
+userRoutes.post("/create", (req: Request, res: Response) => {
   const user = {
     nombre: req.body.nombre,
     email: req.body.email,
@@ -69,43 +69,40 @@ userRoutes.post("/create", (req: Request, res: Response) => {
         err,
       });
     });
-
-    const saldoRoutes = Router();
-    //Crear un saldo
-    const saldo = {
-      nombre: req.body.nombre,
-      email: req.body.email,
-      password: bcrypt.hashSync(req.body.password, 10),
-      tipocuenta: req.body.tipocuenta,
-      numerocuenta: req.body.numerocuenta,
-      saldocuenta: req.body.saldocuenta,
-    };
-    Usuario.create(saldo)
-      .then((saldoDB) => {
-        const tokenuser = Token.getJwtToken({
-          _id: saldoDB._id,
-          nombre: saldoDB.nombre,
-          email: saldoDB.email,
-          tipocuenta: saldoDB.tipocuenta,
-          numerocuenta: saldoDB.numerocuenta,
-          saldocuenta: saldoDB.saldocuenta,
-        });
-    
-        res.json({
-          ok: true,
-          token: tokenuser,
-        });
-      })
-      .catch((err) => {
-        res.json({
-          ok: false,
-          err,
-        });
-      });
 });
 
+const saldoRoutes = Router();
+//Crear un saldo
+const saldo = {
+  nombre: req.body.nombre,
+  email: req.body.email,
+  password: bcrypt.hashSync(req.body.password, 10),
+  tipocuenta: req.body.tipocuenta,
+  numerocuenta: req.body.numerocuenta,
+  saldocuenta: req.body.saldocuenta,
+};
+Usuario.create(saldo)
+  .then((saldoDB) => {
+    const tokenuser = Token.getJwtToken({
+      _id: saldoDB._id,
+      nombre: saldoDB.nombre,
+      email: saldoDB.email,
+      tipocuenta: saldoDB.tipocuenta,
+      numerocuenta: saldoDB.numerocuenta,
+      saldocuenta: saldoDB.saldocuenta,
+    });
 
-
+    res.json({
+      ok: true,
+      token: tokenuser,
+    });
+  })
+  .catch((err) => {
+    res.json({
+      ok: false,
+      err,
+    });
+  });
 
 //Actualizar usuario
 userRoutes.post("/update", verificaToken, (req: any, res: Response) => {
