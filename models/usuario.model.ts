@@ -24,6 +24,10 @@ const usuarioSchema = new Schema ({
         type: String,
         required: [true, 'El numero de cuenta es necesario']
     },
+    saldo:{
+        type: String,
+        required: [true, 'El saldo de cuenta es necesario']
+    },
 })
 
 usuarioSchema.method('compararPassword',function( password: string = '' ):boolean {
