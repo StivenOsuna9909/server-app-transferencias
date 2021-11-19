@@ -142,6 +142,37 @@ userRoutes.post("/update", verificaToken, (req: any, res: Response) => {
   );
 });
 
+//Actualizar SALDO
+userRoutes.post("/updateamount", verificaToken, (req: any, res: Response) => {
+  const user = {
+    saldo: req.body.saldo || req.usuario.saldo,
+  };
+
+  Usuario.findByIdAndUpdate(
+    req.usuario._id,
+    user,
+    { new: true },
+    (err, userDB) => {
+      if (err) throw err;
+
+      if (!userDB) {
+        return res.json({
+          ok: false,
+          mensaje: "No existe un usuario con ese ID",
+        });
+      }
+      const tokenUser = Token.getJwtToken({
+        _id: userDB._id,
+      });
+
+      res.json({
+        ok: true,
+        token: tokenUser,
+      });
+    }
+  );
+});
+
 userRoutes.get("/", [verificaToken], (req: any, res: Response) => {
   const usuario = req.usuario;
   res.json({
