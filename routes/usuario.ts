@@ -48,6 +48,7 @@ userRoutes.post("/create", (req: Request, res: Response) => {
     password: bcrypt.hashSync(req.body.password, 10),
     tipocuenta: req.body.tipocuenta,
     numerocuenta: req.body.numerocuenta,
+    saldocuenta: req.body.saldocuenta,
   };
 
   Usuario.create(user)
@@ -71,43 +72,40 @@ userRoutes.post("/create", (req: Request, res: Response) => {
         err,
       });
     });
-
-    const saldoRoutes = Router();
-    //Crear un saldo
-    const saldo = {
-      nombre: req.body.nombre,
-      email: req.body.email,
-      password: bcrypt.hashSync(req.body.password, 10),
-      tipocuenta: req.body.tipocuenta,
-      numerocuenta: req.body.numerocuenta,
-      saldocuenta: req.body.saldocuenta,
-    };
-    Usuario.create(saldo)
-      .then((saldoDB) => {
-        const tokenuser = Token.getJwtToken({
-          _id: saldoDB._id,
-          nombre: saldoDB.nombre,
-          email: saldoDB.email,
-          tipocuenta: saldoDB.tipocuenta,
-          numerocuenta: saldoDB.numerocuenta,
-          saldocuenta: saldoDB.saldocuenta,
-        });
-    
-        res.json({
-          ok: true,
-          token: tokenuser,
-        });
-      })
-      .catch((err) => {
-        res.json({
-          ok: false,
-          err,
-        });
-      });
 });
 
+/*const saldoRoutes = Router();
+//Crear un saldo
+const saldo = {
+  nombre: req.body.nombre,
+  email: req.body.email,
+  password: bcrypt.hashSync(req.body.password, 10),
+  tipocuenta: req.body.tipocuenta,
+  numerocuenta: req.body.numerocuenta,
+  saldocuenta: req.body.saldocuenta,
+};
+Usuario.create(saldo)
+  .then((saldoDB) => {
+    const tokenuser = Token.getJwtToken({
+      _id: saldoDB._id,
+      nombre: saldoDB.nombre,
+      email: saldoDB.email,
+      tipocuenta: saldoDB.tipocuenta,
+      numerocuenta: saldoDB.numerocuenta,
+      saldocuenta: saldoDB.saldocuenta,
+    });
 
-
+    res.json({
+      ok: true,
+      token: tokenuser,
+    });
+  })
+  .catch((err) => {
+    res.json({
+      ok: false,
+      err,
+    });
+  });*/
 
 //Actualizar usuario
 userRoutes.post("/update", verificaToken, (req: any, res: Response) => {

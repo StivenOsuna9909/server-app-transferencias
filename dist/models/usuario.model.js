@@ -28,6 +28,10 @@ const usuarioSchema = new mongoose_1.Schema({
         type: String,
         required: [true, 'El numero de cuenta es necesario']
     },
+    saldocuenta: {
+        type: String,
+        required: [true, 'El saldo de cuenta es necesario']
+    },
 });
 usuarioSchema.method('compararPassword', function (password = '') {
     if (bcrypt_1.default.compareSync(password, this.password)) {

@@ -7,7 +7,7 @@ const transferenciaRouts = Router();
 
 //Obtener transferencias paginadas
 
-transferenciaRouts.get("/", async (req: any, res: Response) => {
+transferenciaRouts.get("/transfer", async (req: any, res: Response) => {
   let pagina = Number(req.query.pagina) || 1;
   let skip = pagina - 1;
   skip = skip * 10;
@@ -27,7 +27,7 @@ transferenciaRouts.get("/", async (req: any, res: Response) => {
 });
 
 // Crear transferencias
-transferenciaRouts.post("/", [verificaToken], (req: any, res: Response) => {
+transferenciaRouts.post("/post/create", [verificaToken], (req: any, res: Response) => {
   const body = req.body;
 
   body.usuario = req.usuario._id;

@@ -14,33 +14,35 @@ const autenticacion_1 = require("../middlewares/autenticacion");
 const transferencia_model_1 = require("../models/transferencia.model");
 const transferenciaRouts = (0, express_1.Router)();
 //Obtener transferencias paginadas
-transferenciaRouts.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+transferenciaRouts.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let pagina = Number(req.query.pagina) || 1;
     let skip = pagina - 1;
     skip = skip * 10;
     const transf = yield transferencia_model_1.Transfer.find()
         .sort({ _id: -1 })
         .skip(skip)
-        .populate('usuario', '-password')
+        .populate("usuario", "-password")
         .limit(10)
         .exec();
     res.json({
         ok: true,
         pagina,
-        transf
+        transf,
     });
 }));
 // Crear transferencias
-transferenciaRouts.post('/', [autenticacion_1.verificaToken], (req, res) => {
+transferenciaRouts.post("/", [autenticacion_1.verificaToken], (req, res) => {
     const body = req.body;
     body.usuario = req.usuario._id;
-    transferencia_model_1.Transfer.create(body).then((transferDB) => __awaiter(void 0, void 0, void 0, function* () {
-        yield transferDB.populate('usuario', '-password ');
+    transferencia_model_1.Transfer.create(body)
+        .then((transferDB) => __awaiter(void 0, void 0, void 0, function* () {
+        yield transferDB.populate("usuario", "-password ");
         res.json({
             ok: true,
-            transfer: transferDB
+            transfer: transferDB,
         });
-    })).catch(err => {
+    }))
+        .catch((err) => {
         res.json(err);
     });
 });
