@@ -59,6 +59,7 @@ userRoutes.post("/create", (req: Request, res: Response) => {
         email: userDB.email,
         tipocuenta: userDB.tipocuenta,
         numerocuenta: userDB.numerocuenta,
+        saldocuenta: userDB.saldocuenta,
       });
 
       res.json({
