@@ -37,7 +37,7 @@ transferenciaRouts.post("/", [verificaToken], (req: any, res: Response) => {
       await transferDB.populate("usuario", "-password ");
 
       res.json({
-        ok: true,
+        ok: true, 
         transfer: transferDB,
       });
     })

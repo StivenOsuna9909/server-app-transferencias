@@ -24,7 +24,7 @@ const usuarioSchema = new Schema ({
         type: String,
         required: [true, 'El numero de cuenta es necesario']
     },
-    saldo:{
+    saldocuenta:{
         type: String,
         required: [true, 'El saldo de cuenta es necesario']
     },
@@ -46,7 +46,7 @@ export interface IUsuario extends Document{
     password: string;
     tipocuenta: string;
     numerocuenta: string;
-
+    saldocuenta: string;
     compararPassword(password: string): boolean;
 }
 
