@@ -6,39 +6,41 @@ import { verificaToken } from "../middlewares/autenticacion";
 
 const userRoutes = Router();
 
-userRoutes.post("/create", (req: Request, res: Response) => {
-  //login
-  userRoutes.post("/login", (req: Request, res: Response) => {
-    const body = req.body;
-    Usuario.findOne({ email: req.body.email }, (err: any, userDB: IUsuario) => {
-      if (err) throw err;
-      if (!userDB) {
-        return res.json({
-          ok: false,
-          mensaje: "Usuario/contraseña no son correctos",
-        });
-      }
+//login
+userRoutes.post("/login", (req: Request, res: Response) => {
+  const body = req.body;
+  Usuario.findOne({ email: req.body.email }, (err: any, userDB: IUsuario) => {
+    if (err) throw err;
+    if (!userDB) {
+      return res.json({
+        ok: false,
+        mensaje: "Usuario/contraseña no son correctos",
+      });
+    }
 
-      if (userDB.compararPassword(body.password)) {
-        const tokenUser = Token.getJwtToken({
-          _id: userDB._id,
-          nombre: userDB.nombre,
-          email: userDB.email,
-        });
+    if (userDB.compararPassword(body.password)) {
+      const tokenUser = Token.getJwtToken({
+        _id: userDB._id,
+        nombre: userDB.nombre,
+        email: userDB.email,
+      });
 
-        res.json({
-          ok: true,
-          token: tokenUser,
-        });
-      } else {
-        return res.json({
-          ok: false,
-          mensaje: "Usuario/contraseña no son correctos",
-        });
-      }
-    });
+      res.json({
+        ok: true,
+        token: tokenUser,
+      });
+    } else {
+      return res.json({
+        ok: false,
+        mensaje: "Usuario/contraseña no son correctos",
+      });
+    }
   });
+});
 
+
+userRoutes.post("/create", (req: Request, res: Response) => {
+  
   //Crear un usuario
   const user = {
     nombre: req.body.nombre,
